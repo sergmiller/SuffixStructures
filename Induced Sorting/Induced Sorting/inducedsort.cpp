@@ -14,7 +14,8 @@
 using std::cout;
 
 
-vector <size_t> InducedSorting::getSuffArray(std::string s, size_t alpSize) {
+vector <size_t> InducedSorting::getSuffArray(std::string s,
+                                             size_t alpSize) {
     vector <size_t> str(s.size() + 1);
     for(size_t i  = 0;i < s.size(); ++i) {
         str[i] = (s[i] - 'a') + 1;
@@ -24,9 +25,11 @@ vector <size_t> InducedSorting::getSuffArray(std::string s, size_t alpSize) {
     return suffixArrayInducedSortAlg(str, alpSize + 1);
 }
 
-vector <size_t> InducedSorting::suffixArrayInducedSortAlg(vector <size_t>& str, size_t alpSize) {
-    std::vector <types> type(str.size());
-    std::vector <size_t> lmsSubstr;
+vector <size_t> InducedSorting::suffixArrayInducedSortAlg(vector <size_t>& str,
+                                                          size_t alpSize) {
+    vector <types> type(str.size());
+    vector <bool> lmsCharFlag(str.size(), false);
+    vector <size_t> lmsSubstr;
     
     type[str.size() - 1] = S_TYPE;
     
@@ -45,10 +48,11 @@ vector <size_t> InducedSorting::suffixArrayInducedSortAlg(vector <size_t>& str, 
         type[i] = type[i + 1];
         }
     }
-    
+
     for(size_t i = 0;i < str.size() - 1; ++i) {
         if(type[i] == L_TYPE && type[i + 1] == S_TYPE) {
             lmsSubstr.push_back(i + 1);
+            lmsCharFlag[i + 1 ] = true;
         }
     }
     
@@ -63,7 +67,7 @@ vector <size_t> InducedSorting::suffixArrayInducedSortAlg(vector <size_t>& str, 
         ++countChars[str[i]];
     }
     
-    //establish basket size
+    //set up basket size
     for(size_t i = 0;i < alpSize; ++i) {
         basket[i].resize(countChars[i], SIZE_T_MAX);
         cout << countChars[i] << std::endl;
@@ -74,28 +78,71 @@ vector <size_t> InducedSorting::suffixArrayInducedSortAlg(vector <size_t>& str, 
     
     
     
-    cout << "sorted LMS-prefix:\n";
+    //get characters for induction step
+    vector <size_t> character(str.size());
+    
+    size_t lastChar = 0;
+    size_t lastLms = 0;
+    bool existPrev = false;
+    
     for(size_t i = 0;i < basket.size(); ++i) {
-        cout << "{ ";
         for(size_t j = 0;j < basket[i].size(); ++j) {
-            if(basket[i][j] == SIZE_T_MAX) {
-                cout << "-1 ";
-            } else {
-                cout << basket[i][j] << " ";
+            if(lmsCharFlag[basket[i][j]]) {
+                if(existPrev) {
+                    if(isEqualLMS(lastLms, basket[i][j], str, type)) {
+                        character[basket[i][j]] = lastChar;
+                    } else {
+                        character[basket[i][j]] = ++lastChar;
+                    }
+                } else {
+                    character[basket[i][j]] = 0;
+                }
+                
+                lastLms = basket[i][j];
+                existPrev = true;
             }
         }
-        cout << "} ";
     }
-    cout << "\n";
+    
+    vector <size_t> str1;// = getFactorString(basket, lmsCharFlag, str, type); (lmsSubstr.size());
+    
+    for(size_t i = 0;i < str1.size(); ++i) {
+        str1[i] = character[lmsSubstr[i]];
+    }
+
+//    cout << "S1:\n";
+//    
+//    for(size_t i = 0;i < str1.size(); ++i) {
+//        cout << str1[i] << " ";
+//    }
+//    cout << "\n";
+//    
+//    cout << "sorted LMS-prefix:\n";
+//    for(size_t i = 0;i < basket.size(); ++i) {
+//        cout << "{ ";
+//        for(size_t j = 0;j < basket[i].size(); ++j) {
+//            if(basket[i][j] == SIZE_T_MAX) {
+//                cout << "-1 ";
+//            } else {
+//                cout << basket[i][j] << " ";
+//            }
+//        }
+//        cout << "} ";
+//    }
+//    cout << "\n";
     
 
     
     return *(new std::vector <size_t>);
 }
 
-void InducedSorting::inducedSorting(action action, vector<size_t>& str, vector <size_t>& sortedData, vector <types>& type, vector <vector <size_t> >& basket) {
-    vector <size_t> first(basket.size(), 0);//used twice: for insert LMS-suffix and for induced sort
-    vector <size_t> last(basket.size());
+void InducedSorting::inducedSorting(action action,
+                                    vector<size_t>& str,
+                                    vector <size_t>& sortedData,
+                                    vector <types>& type,
+                                    vector <vector <size_t> >& basket) {
+    vector <size_t> head(basket.size(), 0);//used twice: for insert LMS-suffix and for induced sort
+    vector <size_t> tail(basket.size());
 
     //Step 1
     if(action == SORT_LMS_SUBSTR) {
@@ -103,13 +150,13 @@ void InducedSorting::inducedSorting(action action, vector<size_t>& str, vector <
         vector <size_t>& lmsSuff = sortedData;
         for(size_t i = 0;i < lmsSuff.size(); ++i) {
             size_t curBasket = str[lmsSuff[i]];
-            basket[curBasket][basket[curBasket].size() - 1 - first[curBasket]] = lmsSuff[i];
-            ++first[curBasket];
+            basket[curBasket][basket[curBasket].size() - 1 - head[curBasket]] = lmsSuff[i];
+            ++head[curBasket];
         }
         
         for(size_t i = 0;i < basket.size();++i) {
-            last[i] = basket[i].size() - 1;
-            first[i] = 0;
+            tail[i] = basket[i].size() - 1;
+            head[i] = 0;
         }
     } else {
         //TO DO
@@ -126,8 +173,8 @@ void InducedSorting::inducedSorting(action action, vector<size_t>& str, vector <
             size_t curPos = basket[i][j] - 1;
             size_t curChar = str[curPos];
             if(type[curPos] == L_TYPE) {
-                basket[curChar][first[curChar]] = curPos;
-                ++first[curChar];
+                basket[curChar][head[curChar]] = curPos;
+                ++head[curChar];
             }
         }
     }
@@ -147,13 +194,29 @@ void InducedSorting::inducedSorting(action action, vector<size_t>& str, vector <
             size_t curPos = basket[i][j] - 1;
             size_t curChar = str[curPos];
             if(type[curPos] == S_TYPE) {
-                basket[curChar][last[curChar]] = curPos;
-                --last[curChar];
+                basket[curChar][tail[curChar]] = curPos;
+                --tail[curChar];
             }
         }
     }
 }
 
+bool InducedSorting::isEqualLMS(size_t lms1,
+                                size_t lms2,
+                                vector <size_t>& str,
+                                vector <types>& type) {
+    bool existLType = false;
+    while(lms1 < str.size() && lms2 < str.size() && str[lms1] == str[lms2] && type[lms1] == type[lms2]) {
+        if(type[lms1] == L_TYPE) {
+            existLType = true;
+        }
+        
+        if(existLType && type[lms1] == S_TYPE) {
+            return true;
+        }
 
-
-
+        ++lms1;
+        ++lms2;
+    }
+    return false;
+}
