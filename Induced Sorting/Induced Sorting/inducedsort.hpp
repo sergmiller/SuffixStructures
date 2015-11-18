@@ -37,15 +37,25 @@ public:
                                        size_t alpSize);
 private:
     class WorkingClass {
+    public:
+        WorkingClass(vector <size_t>& str, size_t alpSize);
+        vector <size_t> suffixArrayInducedSortAlg();
+    private:
         size_t alpSize;
-        vector <size_t> str;
         vector <types> type;
+        vector <size_t>& str;
+        vector <size_t> lmsSubstr;
+        vector <bool> lmsCharFlag;
+        vector <size_t> character;
         vector <vector <size_t> > basket;
+        
+        void getTypes();
+        void setUpBasket();
+        void clearBasket();
+        void getLMSCharacters();
+        void calcFactorStrings();
+        void induceSuffixArray(vector <size_t> inducedSuffixArray);
         bool isEqualLMS(size_t lms1, size_t lms2);
-    
-        vector<size_t> suffixArrayInducedSortAlg(vector<size_t>& str,
-                                                    size_t alpSize);
-    
         void inducedSorting(action action, vector <size_t>& sortedData);
     //static vector <size_t> getFactorString;
     };

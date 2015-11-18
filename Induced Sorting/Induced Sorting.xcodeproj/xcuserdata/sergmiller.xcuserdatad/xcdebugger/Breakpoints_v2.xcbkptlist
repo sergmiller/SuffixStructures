@@ -10,12 +10,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Induced Sorting/inducedsort.cpp"
-            timestampString = "469576499.333817"
+            timestampString = "469581188.382921"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "149"
-            endingLineNumber = "149"
-            landmarkName = "InducedSorting::inducedSorting(action action, vector&lt;size_t&gt;&amp; str, vector &lt;size_t&gt;&amp; sortedData, vector &lt;types&gt;&amp; type, vector &lt;vector &lt;size_t&gt; &gt;&amp; basket)"
+            startingLineNumber = "168"
+            endingLineNumber = "168"
+            landmarkName = "InducedSorting::WorkingClass::inducedSorting(action action, vector &lt;size_t&gt;&amp; sortedData)"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Induced Sorting/inducedsort.cpp"
+            timestampString = "469578748.257072"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "27"
+            endingLineNumber = "27"
+            landmarkName = "InducedSorting::getSuffArray(std::string s, size_t alpSize)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
