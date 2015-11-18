@@ -25,12 +25,13 @@ enum action{
     GET_SUFF_ARRAY
 };
 
+
 class InducedSorting {
 public:
     static vector<size_t> getSuffArray(std::string s, size_t alpSize);
 private:
     static vector<size_t> suffixArrayInducedSortAlg(vector<size_t>& s, size_t alpSize);
-    static void inducedSorting(action action, vector<size_t>& str, vector <size_t>& sortedData, vector <size_t>& bucket);
+    static void inducedSorting(action action, vector<size_t>& str, vector <size_t>& sortedData, vector <types>& type, vector <vector <size_t> >& bucket);
 };
 
 #endif /* inducedsort_hpp */

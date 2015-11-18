@@ -7,9 +7,15 @@
 //
 
 #include <iostream>
+#include <string>
+#include <fstream>
+#include "inducedsort.hpp"
 
-int main(int argc, const char * argv[]) {
-    // insert code here...
-    std::cout << "Hello, World!\n";
+int main() {
+    freopen("input.txt", "r", stdin);
+    freopen("output.txt", "w", stdout);
+    std::string s;
+    std::cin >> s;
+    vector <size_t> sa = InducedSorting::getSuffArray(s, 26);
     return 0;
 }

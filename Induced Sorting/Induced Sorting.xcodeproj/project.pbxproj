@@ -24,6 +24,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		B9D91E051BFCE75E00239347 /* input.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = input.txt; sourceTree = "<group>"; };
+		B9D91E061BFCE76C00239347 /* output.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = output.txt; sourceTree = "<group>"; };
 		B9F0719B1BFA4A9700BADA9C /* Induced Sorting */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Induced Sorting"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9F0719E1BFA4A9700BADA9C /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		B9F071A51BFA4B2300BADA9C /* inducedsort.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = inducedsort.cpp; sourceTree = "<group>"; };
@@ -63,6 +65,8 @@
 				B9F0719E1BFA4A9700BADA9C /* main.cpp */,
 				B9F071A61BFA4B2300BADA9C /* inducedsort.hpp */,
 				B9F071A51BFA4B2300BADA9C /* inducedsort.cpp */,
+				B9D91E051BFCE75E00239347 /* input.txt */,
+				B9D91E061BFCE76C00239347 /* output.txt */,
 			);
 			path = "Induced Sorting";
 			sourceTree = "<group>";
@@ -243,6 +247,7 @@
 				B9F071A41BFA4A9700BADA9C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
