@@ -476,11 +476,12 @@ void test3() {
     string s;
     cin >> s;
     vector <size_t> sa = InducedSorting::getSuffArray(s);
+    s += '$';
     vector <size_t> lcp = getLcp(s, sa);
     
-    size_t countSubstr = (s.size() - sa[1]);
-    for(size_t i = 2;i <= s.size(); ++i) {
-        countSubstr += (s.size() - sa[i] - lcp[i-1]);
+    size_t countSubstr = (s.size() - 1 - sa[1]);
+    for(size_t i = 2;i < s.size(); ++i) {
+        countSubstr += (s.size()- 1 - sa[i] - lcp[i-1]);
     }
     cout << countSubstr << std::endl;
 }
