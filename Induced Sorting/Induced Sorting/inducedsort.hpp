@@ -33,8 +33,7 @@ enum action{
 
 class InducedSorting {
 public:
-    static vector<size_t> getSuffArray(std::string s,
-                                       size_t alpSize);
+    static vector<size_t> getSuffArray(std::string s);
 private:
     class WorkingClass {
     public:
@@ -42,18 +41,25 @@ private:
         vector <size_t> suffixArrayInducedSortAlg();
     private:
         size_t alpSize;
+        size_t countChar;
+        bool uniqueCharsFlag;
+        
         vector <types> type;
         vector <size_t>& str;
         vector <size_t> lmsSubstr;
         vector <bool> lmsCharFlag;
         vector <size_t> character;
+        vector <size_t> factorStr;
+        vector <size_t> inducedStr;
         vector <vector <size_t> > basket;
+        vector <size_t> inducedSuffixArray;
         
         void getTypes();
         void setUpBasket();
         void clearBasket();
         void getLMSCharacters();
         void calcFactorStrings();
+        void directlyComputeInducedSuffixArray();
         void induceSuffixArray(vector <size_t> inducedSuffixArray);
         bool isEqualLMS(size_t lms1, size_t lms2);
         void inducedSorting(action action, vector <size_t>& sortedData);
