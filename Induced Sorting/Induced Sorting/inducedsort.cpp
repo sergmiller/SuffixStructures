@@ -11,9 +11,6 @@
 #include <string>
 #include <iostream>
 
-using std::cout;
-
-
 vector <size_t> InducedSorting::getSuffArray(std::string s) {
     vector <size_t> str(s.size() + 1);
     char minChar = CHAR_MAX;
@@ -192,8 +189,7 @@ void InducedSorting::WorkingClass::inducedSorting(action action, vector <size_t>
         }
         
     } else {
-        //TO DO
-        //GET SUFF ARRAY
+        //get suffix array from induced suffix array
         vector <size_t>& inducedSuffArray = sortedData;
         
         size_t i = inducedSuffArray.size();

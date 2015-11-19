@@ -25,12 +25,6 @@ enum action{
     GET_SUFF_ARRAY
 };
 
-//struct LMS {
-//    size_t start;
-//    size_t length;
-//};
-
-
 class InducedSorting {
 public:
     static vector<size_t> getSuffArray(std::string s);
@@ -63,7 +57,6 @@ private:
         void induceSuffixArray(vector <size_t> inducedSuffixArray);
         bool isEqualLMS(size_t lms1, size_t lms2);
         void inducedSorting(action action, vector <size_t>& sortedData);
-    //static vector <size_t> getFactorString;
     };
 };
 
