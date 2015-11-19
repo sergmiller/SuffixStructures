@@ -331,7 +331,8 @@ bool InducedSorting::WorkingClass::isEqualLMS(size_t lms1, size_t lms2) {
 }
 /*****************************************************************************************/
 
-void solve();
+void test1();//test for algo task https://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&page=show_problem&problem=1620
+void solve1();
 
 int main() {
     std::ios::sync_with_stdio(false);
@@ -344,12 +345,17 @@ int main() {
 //    for(size_t i = 0;i < sa.size(); ++i) {
 //        std::cout << sa[i] << " ";
 //    }
+    
+    test1();
+    return 0;
+}
+
+void test1() {
     size_t n;
     cin >> n;
     for(size_t i = 0;i < n;++i) {
-        solve();
+        solve1();
     }
-    return 0;
 }
 
 bool cmpStr(string& t, string& s, size_t offset) {
@@ -385,7 +391,7 @@ bool isSubstr(string& s, string& t, vector <size_t>& suffArray) {
     return equalStr(t, s, suffArray[left]) || equalStr(t, s, suffArray[right]);
 }
 
-void solve() {
+void solve1() {
     string s;
     cin >> s;
     vector <size_t> suffArray = InducedSorting::getSuffArray(s);
@@ -397,27 +403,3 @@ void solve() {
         cout << (isSubstr(s,t, suffArray) ? "y\n" : "n\n");
     }
 }
-
-
-
-//    cout << "S1:\n";
-//
-//    for(size_t i = 0;i < inducedStr.size(); ++i) {
-//        cout << inducedStr[i] << " ";
-//    }
-//    cout << "\n";
-
-//    cout << "sorted LMS-prefix:\n";
-//    for(size_t i = 0;i < basket.size(); ++i) {
-//        cout << "{ ";
-//        for(size_t j = 0;j < basket[i].size(); ++j) {
-//            if(basket[i][j] == SIZE_T_MAX) {
-//                cout << "-1 ";
-//            } else {
-//                cout << basket[i][j] << " ";
-//            }
-//        }
-//        cout << "} ";
-//    }
-//    cout << "\n";
-//
