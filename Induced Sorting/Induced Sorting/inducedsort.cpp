@@ -11,6 +11,34 @@
 #include <string>
 #include <iostream>
 
+vector <size_t> getLcp(std::string& s, vector <size_t>& suffArray) {
+    vector <size_t> lcp(s.size() + 1);
+    vector <size_t> pos(s.size() + 1);
+    
+    for(size_t i = 0;i <= s.size(); ++i) {
+        pos[suffArray[i]] = i;
+    }
+    
+    size_t k = 0;
+    for(size_t i = 0;i <= s.size(); ++i) {
+        if(k > 0) {
+            --k;
+        }
+        
+        if(pos[i] == s.size()) {
+            lcp[s.size()] = SIZE_T_MAX;
+            k = 0;
+        } else {
+            size_t j = suffArray[pos[i] + 1];
+            while(std::max(i + k, j + k) < s.size() && s[i + k] == s[j + k]) {
+                ++k;
+            }
+            lcp[pos[i]] = k;
+        }
+    }
+    return lcp;
+}
+
 vector <size_t> InducedSorting::getSuffArray(std::string s) {
     vector <size_t> str(s.size() + 1);
     char minChar = CHAR_MAX;

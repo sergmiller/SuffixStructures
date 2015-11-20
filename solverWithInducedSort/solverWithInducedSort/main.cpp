@@ -9,6 +9,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <assert.h>
 #include <vector>
 
 using std::cin;
@@ -16,9 +17,9 @@ using std::cout;
 using std::string;
 using std::vector;
 
-#define CHAR_MAX 255
+#define CHAR_MAX 127
 #define CHAR_MIN 0
-#define SIZE_T_MAX 18446744073709551615
+#define SIZE_T_MAX (size_t)1e12
 
 /*****************************************************************************************/
 #ifndef inducedsort_hpp
@@ -33,27 +34,28 @@ enum action{
     GET_SUFF_ARRAY
 };
 
-vector <size_t> getLcp(std::string& s, vector <size_t>& lcp);
+void getLcp(std::string& s, vector <size_t>& suffArray, vector <size_t>& lcp);
 
 class InducedSorting {
 public:
-    static vector<size_t> getSuffArray(std::string s);
+    static void getSuffArray(std::string& s, vector <size_t>& suffArray);
 private:
     class WorkingClass {
     public:
-        WorkingClass(vector <size_t>& str, size_t alpSize);
-        vector <size_t> suffixArrayInducedSortAlg();
+        WorkingClass(vector <size_t>& str, vector <size_t>& suffArray, size_t alpSize);
+        void suffixArrayInducedSortAlg();
     private:
         size_t alpSize;
         size_t countChar;
         bool uniqueCharsFlag;
+        
+        vector <size_t>& str;
+        vector <size_t>& suffArray;
 
         vector <types> type;
-        vector <size_t>& str;
         vector <size_t> lmsSubstr;
         vector <bool> lmsCharFlag;
         vector <size_t> character;
-        vector <size_t> factorStr;
         vector <size_t> inducedStr;
         vector <vector <size_t> > basket;
         vector <size_t> inducedSuffixArray;
@@ -74,7 +76,7 @@ private:
 /*****************************************************************************************/
 
 
-vector <size_t> InducedSorting::getSuffArray(std::string s) {
+void InducedSorting::getSuffArray(std::string& s, vector <size_t>& suffArray) {
     vector <size_t> str(s.size() + 1);
     char minChar = CHAR_MAX;
     char maxChar = CHAR_MIN;
@@ -82,18 +84,18 @@ vector <size_t> InducedSorting::getSuffArray(std::string s) {
         minChar = std::min(minChar, s[i]);
         maxChar = std::max(maxChar, s[i]);
     }
-
+    //cout << "min " << minChar << " max " << maxChar << " d " << maxChar - minChar <<  std::endl;
     for(size_t i  = 0;i < s.size(); ++i) {
         str[i] = (s[i] - minChar) + 1;
     }
     str[s.size()] = 0;
 
-    WorkingClass sort = WorkingClass(str, maxChar - minChar + 2);
+    WorkingClass sort = WorkingClass(str, suffArray, maxChar - minChar + 2);
 
-    return sort.suffixArrayInducedSortAlg();
+    sort.suffixArrayInducedSortAlg();
 }
 
-InducedSorting::WorkingClass::WorkingClass(vector <size_t>& str, size_t alpSize):str(str) {
+InducedSorting::WorkingClass::WorkingClass(vector <size_t>& str, vector <size_t>& suffArray, size_t alpSize):str(str), suffArray(suffArray) {
     WorkingClass::alpSize = alpSize;
 }
 
@@ -168,11 +170,9 @@ void InducedSorting::WorkingClass::calcFactorStrings() {
                         character[basket[i][j]] = countChar;
                     } else {
                         character[basket[i][j]] = ++countChar;
-                        factorStr.push_back(basket[i][j]);
                     }
                 } else {
                     character[basket[i][j]] = 0;
-                    factorStr.push_back(basket[i][j]);
                 }
 
                 lastLms = basket[i][j];
@@ -197,8 +197,7 @@ void InducedSorting::WorkingClass::directlyComputeInducedSuffixArray() {
     }
 }
 
-vector <size_t> InducedSorting::WorkingClass::suffixArrayInducedSortAlg() {
-
+void InducedSorting::WorkingClass::suffixArrayInducedSortAlg() {
     getTypes();
     getLMSCharacters();
 
@@ -217,24 +216,23 @@ vector <size_t> InducedSorting::WorkingClass::suffixArrayInducedSortAlg() {
     if(countChar + 1 == lmsSubstr.size()) {
         directlyComputeInducedSuffixArray();
     } else {
-
-        WorkingClass induction = WorkingClass(inducedStr, alpSize);
-        inducedSuffixArray = induction.suffixArrayInducedSortAlg();
+        WorkingClass induction = WorkingClass(inducedStr, inducedSuffixArray, countChar + 1);
+        induction.suffixArrayInducedSortAlg();
     }
 
     clearBasket();
 
     inducedSorting(GET_SUFF_ARRAY, inducedSuffixArray);
 
-    vector <size_t> suffArray;
-
+    suffArray.resize(str.size());
+    size_t k = 0;
+    
     for(size_t i = 0;i < basket.size(); ++i) {
         for(size_t j = 0;j < basket[i].size(); ++j) {
-            suffArray.push_back(basket[i][j]);
+            suffArray[k++] = basket[i][j];
         }
     }
-
-    return suffArray;
+    //cout << std::endl;
 }
 
 void InducedSorting::WorkingClass::inducedSorting(action action, vector <size_t>& sortedData) {
@@ -252,8 +250,7 @@ void InducedSorting::WorkingClass::inducedSorting(action action, vector <size_t>
         }
 
     } else {
-        //TO DO
-        //GET SUFF ARRAY
+        //get suff array
         vector <size_t>& inducedSuffArray = sortedData;
 
         size_t i = inducedSuffArray.size();
@@ -266,7 +263,11 @@ void InducedSorting::WorkingClass::inducedSorting(action action, vector <size_t>
     }
 
     for(size_t i = 0;i < basket.size();++i) {
-        tail[i] = basket[i].size() - 1;
+        if(basket[i].size() != 0) {
+            tail[i] = basket[i].size() - 1;
+        } else {
+            tail[i]  =0;
+        }
         head[i] = 0;
     }
 
@@ -285,7 +286,6 @@ void InducedSorting::WorkingClass::inducedSorting(action action, vector <size_t>
             }
         }
     }
-
 
     //Step 3: insert S-type LMS-prefix
     size_t i = basket.size();
@@ -310,7 +310,7 @@ void InducedSorting::WorkingClass::inducedSorting(action action, vector <size_t>
 
 bool InducedSorting::WorkingClass::isEqualLMS(size_t lms1, size_t lms2) {
     bool existLType = false;
-    while(lms1 < str.size() && lms2 < str.size() && str[lms1] == str[lms2] && type[lms1] == type[lms2]) {
+    while(str[lms1] == str[lms2] && type[lms1] == type[lms2]) {
         if(type[lms1] == L_TYPE) {
             existLType = true;
         }
@@ -318,16 +318,18 @@ bool InducedSorting::WorkingClass::isEqualLMS(size_t lms1, size_t lms2) {
         if(existLType && type[lms1] == S_TYPE) {
             return true;
         }
-
+        
+        assert(lms1 <str.size() && lms2 < str.size());
+        
         ++lms1;
         ++lms2;
     }
     return false;
 }
 
-vector <size_t> getLcp(std::string& s, vector <size_t>& suffArray) {
-    vector <size_t> lcp(s.size(), 0);
-    vector <size_t> pos(s.size(), 0);
+void getLcp(std::string& s, vector <size_t>& suffArray, vector <size_t>& lcp) {
+    lcp.resize(s.size());
+    vector <size_t> pos(s.size());
     
     for(size_t i = 0;i < s.size(); ++i) {
         pos[suffArray[i]] = i;
@@ -340,7 +342,7 @@ vector <size_t> getLcp(std::string& s, vector <size_t>& suffArray) {
         }
         
         if(pos[i] == s.size() - 1) {
-            lcp[s.size()] = SIZE_T_MAX;
+            lcp[s.size() - 1] = SIZE_T_MAX;
             k = 0;
         } else {
             size_t j = suffArray[pos[i] + 1];
@@ -350,16 +352,15 @@ vector <size_t> getLcp(std::string& s, vector <size_t>& suffArray) {
             lcp[pos[i]] = k;
         }
     }
-    return lcp;
 }
 /*****************************************************************************************/
 
-void test1();//test for algo task https://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&page=show_problem&problem=1620
+void test1();//test for  https://uva.onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&page=show_problem&problem=1620
 void solve1();
 
-void test2();
+void test2();//test for http://acm.timus.ru/problem.aspx?space=1&num=1706
 
-void test3();
+void test3();//test for http://informatics.mccme.ru/mod/statements/view3.php?id=7919&chapterid=111789#1
 
 int main() {
     std::ios::sync_with_stdio(false);
@@ -367,18 +368,12 @@ int main() {
     //freopen("output.txt", "w", stdout);
     
     //test1();
-    //test2();
-    test3();
-//    string s;
-//    cin >> s;
-//    vector <size_t> sa = InducedSorting::getSuffArray(s);
-//    vector <size_t> lcp = getLcp(s, sa);
+    test2();
+    //test3();
+    
     return 0;
 }
 
-//vector <size_t> getLcp(string& s) {
-//    
-//}
 
 void test1() {
     size_t n;
@@ -424,10 +419,8 @@ bool isSubstr(string& s, string& t, vector <size_t>& suffArray) {
 void solve1() {
     string s;
     cin >> s;
-    vector <size_t> suffArray = InducedSorting::getSuffArray(s);
-    //    for(size_t i = 0;i < suffArray.size(); ++i) {
-    //        std::cout << suffArray[i] << " ";
-    //    }
+    vector <size_t> suffArray;
+    InducedSorting::getSuffArray(s, suffArray);
     size_t n;
     cin >> n;
     for(size_t i = 0;i < n;++i) {
@@ -439,23 +432,22 @@ void solve1() {
 
 size_t countNotEmptySubstr(size_t len,
                            size_t offset,
-                           string& s,
-                           vector <size_t>& suffArray) {
-    vector <size_t> reducedSA;
-    reducedSA.push_back(len);
+                           string& s) {
     string curSubstr = s.substr(offset, len);
-    for(size_t i = 0;i < suffArray.size(); ++i) {
-        if(suffArray[i] >= offset && suffArray[i] < offset + len) {
-            reducedSA.push_back(suffArray[i] - offset);
-        }
+    
+    vector <size_t> suffArray;
+    InducedSorting::getSuffArray(curSubstr, suffArray);
+
+    curSubstr += 1;
+    
+    vector <size_t> lcp;
+    getLcp(curSubstr, suffArray, lcp);
+    
+    long long countSubstr = 0;
+    for(size_t i = 1;i < len + 1; ++i) {
+        countSubstr += (len - suffArray[i] - lcp[i-1]);
     }
     
-    vector <size_t> lcp = getLcp(curSubstr, reducedSA);
-    
-    size_t countSubstr = (len - reducedSA[1]);
-    for(size_t i = 2;i <= len; ++i) {
-        countSubstr += (len - reducedSA[i] - lcp[i-1]);
-    }
     return countSubstr;
 }
 
@@ -464,43 +456,26 @@ void test2() {
     string s;
     cin >> k >> s;
     s += s;
-    vector <size_t> sa = InducedSorting::getSuffArray(s);
-
-    
+  
     for(size_t i = 0;i < s.size()/2; ++i) {
-        cout << countNotEmptySubstr(k, i, s, sa) << " ";
+        cout << countNotEmptySubstr(k, i, s) << " ";
     }
 }
 
 void test3() {
     string s;
     cin >> s;
-    vector <size_t> sa = InducedSorting::getSuffArray(s);
-    s += '$';
-    vector <size_t> lcp = getLcp(s, sa);
+    vector <size_t> sa;
+    InducedSorting::getSuffArray(s, sa);
+    s += 1;
+    vector <size_t> lcp;
+    getLcp(s, sa, lcp);
     
-    size_t countSubstr = (s.size() - 1 - sa[1]);
-    for(size_t i = 2;i < s.size(); ++i) {
-        countSubstr += (s.size()- 1 - sa[i] - lcp[i-1]);
+    long long countSubstr = 0;
+    for(size_t i = 1;i < s.size(); ++i) {
+        countSubstr += ((s.size() - 1) - sa[i]) - lcp[i-1];
     }
-    cout << countSubstr << std::endl;
+    
+    cout << countSubstr;
+    //cout << calc_substrings(sa, lcp) << std::endl;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

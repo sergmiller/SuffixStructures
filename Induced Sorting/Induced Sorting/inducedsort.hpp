@@ -25,6 +25,8 @@ enum action{
     GET_SUFF_ARRAY
 };
 
+vector <size_t> getLcp(std::string& s, vector <size_t>& lcp);
+
 class InducedSorting {
 public:
     static vector<size_t> getSuffArray(std::string s);
