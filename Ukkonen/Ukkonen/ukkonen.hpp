@@ -14,34 +14,50 @@
 #include <vector>
 #include <map>
 
-class UkkonenSuffixTree {
+class SuffixTree {
 public:
     void buildTree(std::string& s);
     bool findString(std::string& s);
 private:
-    bool emptyPhase;
-    char lastChar;
-    size_t* lastPos;
-    size_t sizeStr;
-    size_t lastLiftUp;
-    size_t numOfLastChangedSuffix;
-    void addIntoTree(char c);
-    void addNewLeafs();
     class Node {
     public:
-        Node(size_t startPos, size_t length);
+        Node (size_t startPos, size_t length, size_t parent, size_t index);//make cutting vert
+        Node (size_t& lastPos, size_t parent, size_t index);//make leaf
         size_t startPos;
-        size_t length;//length = 0 <=> node is leaf
+        size_t parent;
         Node* link;
-        Node* parent;
         std::map <char, Node*> next;
+        size_t index;
+        size_t getLength();
+        size_t length;//length = 0 <=> node is leaf
+        size_t* lastPos;//pointer to last char in str
     };
     
-    std::vector <Node> tree;
+    class UkkonenBuilder {
+    public:
+        UkkonenBuilder(std::string& s, SuffixTree& suffTree);
+        bool emptyPhase;
+        char lastChar;
+        size_t lastPos;
+        size_t sizeStr;
+        size_t lastLiftUp;
+        size_t currentOffset;
+        size_t numOfLastChangedSuffix;
+        void addIntoTree(char c);
+        void addNewLeafs();
+        void continueTree();
+        void addBranchFromVert();
+        void addBranchBetweenVert();
+        Node* prevSuffix;
+        Node* nextSuffix;
+        Node* currentSuffix;
+        
+        std::string& str;
+        SuffixTree& suffTree;
+    };
+    
+    std::vector <Node*> tree;
     Node* root;
-    Node* lastChangedSuffix;
-    void continueTree(Node* nextSuffParent);
-
 };
 
 #endif /* ukkonen_hpp */

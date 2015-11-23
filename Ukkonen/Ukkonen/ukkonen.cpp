@@ -8,46 +8,89 @@
 
 #include "ukkonen.hpp"
 
-void UkkonenSuffixTree::buildTree(std::string& s) {
+size_t SuffixTree::Node::getLength() {
+    return (length == 0 ? (*lastPos - startPos + 1) : length);
+}
+
+SuffixTree::UkkonenBuilder::UkkonenBuilder(std::string& s, SuffixTree& suffTree):
+str(s), suffTree(suffTree) {}
+
+
+SuffixTree::Node::Node(size_t startPos, size_t length, size_t parent, size_t index):
+startPos(startPos), length(length), parent(parent) {}
+
+SuffixTree::Node::Node(size_t& lastPos, size_t parent, size_t index):
+startPos(lastPos), lastPos(&lastPos), parent(parent) {}
+
+void SuffixTree::buildTree(std::string& s) {
+    UkkonenBuilder builder(s, *this);
     for(size_t i = 0;i < s.size(); ++i) {
-        addIntoTree(s[i]);
+        builder.addIntoTree(s[i]);
     }
 }
 
-void UkkonenSuffixTree::addIntoTree(char c) {
+void SuffixTree::UkkonenBuilder::addIntoTree(char c) {
     ++sizeStr;
     lastChar = c;
     //1 Step: increase leafs from last phase
-    ++*lastPos;
+    ++lastPos;
     
     //2 Step: calc new nodes in tree
     addNewLeafs();
-    
 }
 
-void UkkonenSuffixTree::addNewLeafs() {
-    size_t numOfCurrentSuffix = numOfLastChangedSuffix + 1;
+void SuffixTree::UkkonenBuilder::addNewLeafs() {
     
     emptyPhase = false;
-    Node* currentSuffix = lastChangedSuffix;
-    Node* parent;
-    Node* nextSuffParent;
     
     while(!emptyPhase) {
-        lastChangedSuffix = currentSuffix;
-        parent = lastChangedSuffix->parent;
-        lastLiftUp = lastChangedSuffix->length;
-        nextSuffParent = parent->link;
-        continueTree(nextSuffParent);
+        continueTree();
+        nextSuffix = suffTree.tree[(currentSuffix->parent)]->link->next[lastChar];
+        
+        
+        
+        prevSuffix = currentSuffix;
+        currentSuffix = nextSuffix;
     }
-    
 }
 
-void UkkonenSuffixTree::continueTree(Node* nextSuffParent) {
-    if(nextSuffParent->next[lastChar] == nullptr) {
-        Node* newLeaf = new Node(sizeStr - 1, 1);
-    } else {
-        Node* downVert = nextSuffParent->next[lastChar];
-        for(
+void SuffixTree::UkkonenBuilder::continueTree() {
+    if(currentSuffix->startPos + currentOffset + 1 < currentSuffix->getLength()) {
+        if(str[currentSuffix->startPos + currentOffset + 1] == lastChar) {
+            ++currentOffset;
+            emptyPhase = true;
+            return;
+        } else {
+            addBranchBetweenVert();
+        }
+    }else {
+        if(currentSuffix->next[lastChar] != nullptr) {
+            currentSuffix = currentSuffix->next[lastChar];
+        } else {
+            addBranchFromVert();
+        }
     }
+}
+
+void SuffixTree::UkkonenBuilder::addBranchBetweenVert() {
+    Node* cuttingVert = new Node(currentSuffix->startPos, currentOffset, currentSuffix->parent, suffTree.tree.size());
+    suffTree.tree.push_back(cuttingVert);
+    
+    currentSuffix->startPos += currentOffset;
+    currentSuffix->length -= currentOffset;
+    
+    Node* newLeaf = new Node(lastPos, cuttingVert->index, suffTree.tree.size());
+    suffTree.tree.push_back(newLeaf);
+
+}
+
+void SuffixTree::UkkonenBuilder::addBranchFromVert() {
+    Node* newLeaf = new Node(lastPos, currentSuffix->index, suffTree.tree.size());
+    suffTree.tree.push_back(newLeaf);
+    
+    if(currentSuffix->next.empty()) {
+        currentSuffix->length = currentOffset;
+    }
+    
+    currentSuffix->next[lastChar] = newLeaf;
 }
