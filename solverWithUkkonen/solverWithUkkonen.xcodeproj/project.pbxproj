@@ -7,12 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B953F3831C021BA70063B8C5 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B953F3821C021BA70063B8C5 /* main.cpp */; };
-		B953F38B1C021C9D0063B8C5 /* ukkonen.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B953F3891C021C9D0063B8C5 /* ukkonen.cpp */; };
+		B93307B21C04A94B00DB4797 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B93307B11C04A94B00DB4797 /* main.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		B953F37D1C021BA70063B8C5 /* CopyFiles */ = {
+		B93307AC1C04A94B00DB4797 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -24,16 +23,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		B953F37F1C021BA70063B8C5 /* Ukkonen */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Ukkonen; sourceTree = BUILT_PRODUCTS_DIR; };
-		B953F3821C021BA70063B8C5 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		B953F3891C021C9D0063B8C5 /* ukkonen.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ukkonen.cpp; sourceTree = "<group>"; };
-		B953F38A1C021C9D0063B8C5 /* ukkonen.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ukkonen.hpp; sourceTree = "<group>"; };
-		B953F38C1C03C2BB0063B8C5 /* input.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = input.txt; sourceTree = "<group>"; };
-		B953F38D1C03C2C80063B8C5 /* output.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = output.txt; sourceTree = "<group>"; };
+		B93307AE1C04A94B00DB4797 /* solverWithUkkonen */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = solverWithUkkonen; sourceTree = BUILT_PRODUCTS_DIR; };
+		B93307B11C04A94B00DB4797 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		B93307B81C04A96000DB4797 /* input.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = input.txt; sourceTree = "<group>"; };
+		B94F6EC91C05210800746B5D /* output.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = output.txt; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		B953F37C1C021BA70063B8C5 /* Frameworks */ = {
+		B93307AB1C04A94B00DB4797 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -43,99 +40,96 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		B953F3761C021BA70063B8C5 = {
+		B93307A51C04A94B00DB4797 = {
 			isa = PBXGroup;
 			children = (
-				B953F3811C021BA70063B8C5 /* Ukkonen */,
-				B953F3801C021BA70063B8C5 /* Products */,
+				B93307B01C04A94B00DB4797 /* solverWithUkkonen */,
+				B93307AF1C04A94B00DB4797 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		B953F3801C021BA70063B8C5 /* Products */ = {
+		B93307AF1C04A94B00DB4797 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B953F37F1C021BA70063B8C5 /* Ukkonen */,
+				B93307AE1C04A94B00DB4797 /* solverWithUkkonen */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		B953F3811C021BA70063B8C5 /* Ukkonen */ = {
+		B93307B01C04A94B00DB4797 /* solverWithUkkonen */ = {
 			isa = PBXGroup;
 			children = (
-				B953F3821C021BA70063B8C5 /* main.cpp */,
-				B953F3891C021C9D0063B8C5 /* ukkonen.cpp */,
-				B953F38A1C021C9D0063B8C5 /* ukkonen.hpp */,
-				B953F38C1C03C2BB0063B8C5 /* input.txt */,
-				B953F38D1C03C2C80063B8C5 /* output.txt */,
+				B93307B11C04A94B00DB4797 /* main.cpp */,
+				B93307B81C04A96000DB4797 /* input.txt */,
+				B94F6EC91C05210800746B5D /* output.txt */,
 			);
-			path = Ukkonen;
+			path = solverWithUkkonen;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		B953F37E1C021BA70063B8C5 /* Ukkonen */ = {
+		B93307AD1C04A94B00DB4797 /* solverWithUkkonen */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B953F3861C021BA70063B8C5 /* Build configuration list for PBXNativeTarget "Ukkonen" */;
+			buildConfigurationList = B93307B51C04A94B00DB4797 /* Build configuration list for PBXNativeTarget "solverWithUkkonen" */;
 			buildPhases = (
-				B953F37B1C021BA70063B8C5 /* Sources */,
-				B953F37C1C021BA70063B8C5 /* Frameworks */,
-				B953F37D1C021BA70063B8C5 /* CopyFiles */,
+				B93307AA1C04A94B00DB4797 /* Sources */,
+				B93307AB1C04A94B00DB4797 /* Frameworks */,
+				B93307AC1C04A94B00DB4797 /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = Ukkonen;
-			productName = Ukkonen;
-			productReference = B953F37F1C021BA70063B8C5 /* Ukkonen */;
+			name = solverWithUkkonen;
+			productName = solverWithUkkonen;
+			productReference = B93307AE1C04A94B00DB4797 /* solverWithUkkonen */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		B953F3771C021BA70063B8C5 /* Project object */ = {
+		B93307A61C04A94B00DB4797 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "Сергей Миллер";
 				TargetAttributes = {
-					B953F37E1C021BA70063B8C5 = {
+					B93307AD1C04A94B00DB4797 = {
 						CreatedOnToolsVersion = 7.1.1;
 					};
 				};
 			};
-			buildConfigurationList = B953F37A1C021BA70063B8C5 /* Build configuration list for PBXProject "Ukkonen" */;
+			buildConfigurationList = B93307A91C04A94B00DB4797 /* Build configuration list for PBXProject "solverWithUkkonen" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 			);
-			mainGroup = B953F3761C021BA70063B8C5;
-			productRefGroup = B953F3801C021BA70063B8C5 /* Products */;
+			mainGroup = B93307A51C04A94B00DB4797;
+			productRefGroup = B93307AF1C04A94B00DB4797 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				B953F37E1C021BA70063B8C5 /* Ukkonen */,
+				B93307AD1C04A94B00DB4797 /* solverWithUkkonen */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		B953F37B1C021BA70063B8C5 /* Sources */ = {
+		B93307AA1C04A94B00DB4797 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B953F3831C021BA70063B8C5 /* main.cpp in Sources */,
-				B953F38B1C021C9D0063B8C5 /* ukkonen.cpp in Sources */,
+				B93307B21C04A94B00DB4797 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		B953F3841C021BA70063B8C5 /* Debug */ = {
+		B93307B31C04A94B00DB4797 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -178,7 +172,7 @@
 			};
 			name = Debug;
 		};
-		B953F3851C021BA70063B8C5 /* Release */ = {
+		B93307B41C04A94B00DB4797 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -214,14 +208,14 @@
 			};
 			name = Release;
 		};
-		B953F3871C021BA70063B8C5 /* Debug */ = {
+		B93307B61C04A94B00DB4797 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
 		};
-		B953F3881C021BA70063B8C5 /* Release */ = {
+		B93307B71C04A94B00DB4797 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -231,24 +225,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		B953F37A1C021BA70063B8C5 /* Build configuration list for PBXProject "Ukkonen" */ = {
+		B93307A91C04A94B00DB4797 /* Build configuration list for PBXProject "solverWithUkkonen" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				B953F3841C021BA70063B8C5 /* Debug */,
-				B953F3851C021BA70063B8C5 /* Release */,
+				B93307B31C04A94B00DB4797 /* Debug */,
+				B93307B41C04A94B00DB4797 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B953F3861C021BA70063B8C5 /* Build configuration list for PBXNativeTarget "Ukkonen" */ = {
+		B93307B51C04A94B00DB4797 /* Build configuration list for PBXNativeTarget "solverWithUkkonen" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				B953F3871C021BA70063B8C5 /* Debug */,
-				B953F3881C021BA70063B8C5 /* Release */,
+				B93307B61C04A94B00DB4797 /* Debug */,
+				B93307B71C04A94B00DB4797 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = B953F3771C021BA70063B8C5 /* Project object */;
+	rootObject = B93307A61C04A94B00DB4797 /* Project object */;
 }

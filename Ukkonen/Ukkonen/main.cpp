@@ -7,9 +7,23 @@
 //
 
 #include <iostream>
+#include <string>
+#include "ukkonen.hpp"
+using std::cin;
+using std::cout;
+using std::string;
 
 int main(int argc, const char * argv[]) {
-    // insert code here...
-    std::cout << "Hello, World!\n";
+    freopen("input.txt", "r", stdin);
+    //freopen("output.txt", "w", stdout);
+    string s;
+    cin >> s;
+    //s.push_back('$');
+    SuffixTree st;
+    st.buildTree(s);
+    //st.outTree(st.root);
+    //cout << s << std::endl;
+    cout << st.calcSum() << "\n";
+  
     return 0;
 }

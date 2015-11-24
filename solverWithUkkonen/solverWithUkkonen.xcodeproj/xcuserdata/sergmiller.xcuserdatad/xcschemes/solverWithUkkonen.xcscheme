@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B953F37E1C021BA70063B8C5"
-               BuildableName = "Ukkonen"
-               BlueprintName = "Ukkonen"
-               ReferencedContainer = "container:Ukkonen.xcodeproj">
+               BlueprintIdentifier = "B93307AD1C04A94B00DB4797"
+               BuildableName = "solverWithUkkonen"
+               BlueprintName = "solverWithUkkonen"
+               ReferencedContainer = "container:solverWithUkkonen.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -32,10 +32,10 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "B953F37E1C021BA70063B8C5"
-            BuildableName = "Ukkonen"
-            BlueprintName = "Ukkonen"
-            ReferencedContainer = "container:Ukkonen.xcodeproj">
+            BlueprintIdentifier = "B93307AD1C04A94B00DB4797"
+            BuildableName = "solverWithUkkonen"
+            BlueprintName = "solverWithUkkonen"
+            ReferencedContainer = "container:solverWithUkkonen.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -47,7 +47,7 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "YES"
-      customWorkingDirectory = "/Users/sergmiller/Documents/projcpp/SuffixStructures/Ukkonen/Ukkonen"
+      customWorkingDirectory = "/Users/sergmiller/Documents/projcpp/SuffixStructures/solverWithUkkonen/solverWithUkkonen"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
@@ -56,10 +56,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "B953F37E1C021BA70063B8C5"
-            BuildableName = "Ukkonen"
-            BlueprintName = "Ukkonen"
-            ReferencedContainer = "container:Ukkonen.xcodeproj">
+            BlueprintIdentifier = "B93307AD1C04A94B00DB4797"
+            BuildableName = "solverWithUkkonen"
+            BlueprintName = "solverWithUkkonen"
+            ReferencedContainer = "container:solverWithUkkonen.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -75,10 +75,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "B953F37E1C021BA70063B8C5"
-            BuildableName = "Ukkonen"
-            BlueprintName = "Ukkonen"
-            ReferencedContainer = "container:Ukkonen.xcodeproj">
+            BlueprintIdentifier = "B93307AD1C04A94B00DB4797"
+            BuildableName = "solverWithUkkonen"
+            BlueprintName = "solverWithUkkonen"
+            ReferencedContainer = "container:solverWithUkkonen.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
