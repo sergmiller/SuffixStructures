@@ -47,15 +47,23 @@ private:
         vector <size_t> character;
         vector <size_t> factorStr;
         vector <size_t> inducedStr;
-        vector <vector <size_t> > basket;
+        vector <size_t> suffixArray;
         vector <size_t> inducedSuffixArray;
+        
+        vector <vector <size_t> > basket;
         
         void getTypes();
         void setUpBasket();
         void clearBasket();
+        void inductionStep();
         void getLMSCharacters();
         void calcFactorStrings();
+        void updateSuffArrayFromBasket();
         void directlyComputeInducedSuffixArray();
+        void insertLTypeLMSprefix(vector <size_t>& head);
+        void insertSTypeLMSprefix(vector <size_t>& tail);
+        void insertLMSSubstringsInBasket(vector <size_t>& lmsSuff);
+        void insertInducedSuffixArrayInBasket(vector <size_t>& inducedSuffArray);
         void induceSuffixArray(vector <size_t> inducedSuffixArray);
         bool isEqualLMS(size_t lms1, size_t lms2);
         void inducedSorting(action action, vector <size_t>& sortedData);

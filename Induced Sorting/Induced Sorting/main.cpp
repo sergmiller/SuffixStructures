@@ -19,7 +19,7 @@ using std::vector;
 
 int main() {
     freopen("input.txt", "r", stdin);
-    freopen("output.txt", "w", stdout);
+    //freopen("output.txt", "w", stdout);
     string s;
     cin >> s;
     vector <size_t> sa = InducedSorting::getSuffArray(s);

@@ -145,6 +145,13 @@ void InducedSorting::WorkingClass::calcFactorStrings() {
             }
         }
     }
+    
+    inducedStr.resize(lmsSubstr.size());
+    
+    for(size_t i = 0;i < inducedStr.size(); ++i) {
+        
+        inducedStr[i] = character[lmsSubstr[i]];
+    }
 }
 
 void InducedSorting::WorkingClass::clearBasket() {
@@ -162,23 +169,7 @@ void InducedSorting::WorkingClass::directlyComputeInducedSuffixArray() {
     }
 }
 
-vector <size_t> InducedSorting::WorkingClass::suffixArrayInducedSortAlg() {
-    
-    getTypes();
-    getLMSCharacters();
-    
-    setUpBasket();
-    
-    inducedStr.resize(lmsSubstr.size());
-    
-    inducedSorting(SORT_LMS_SUBSTR, lmsSubstr);
-    calcFactorStrings();
-    
-    for(size_t i = 0;i < inducedStr.size(); ++i) {
-        
-        inducedStr[i] = character[lmsSubstr[i]];
-    }
-    
+void InducedSorting::WorkingClass::inductionStep() {
     if(countChar + 1 == lmsSubstr.size()) {
         directlyComputeInducedSuffixArray();
     } else {
@@ -186,55 +177,60 @@ vector <size_t> InducedSorting::WorkingClass::suffixArrayInducedSortAlg() {
         WorkingClass induction = WorkingClass(inducedStr, alpSize);
         inducedSuffixArray = induction.suffixArrayInducedSortAlg();
     }
+}
+
+vector <size_t> InducedSorting::WorkingClass::suffixArrayInducedSortAlg() {
+    
+    getTypes();
+    getLMSCharacters();
+    setUpBasket();
+    
+    inducedSorting(SORT_LMS_SUBSTR, lmsSubstr);
+    calcFactorStrings();
+    
+    inductionStep();
     
     clearBasket();
     
     inducedSorting(GET_SUFF_ARRAY, inducedSuffixArray);
     
-    vector <size_t> suffArray;
+    updateSuffArrayFromBasket();
     
-    for(size_t i = 0;i < basket.size(); ++i) {
-        for(size_t j = 0;j < basket[i].size(); ++j) {
-            suffArray.push_back(basket[i][j]);
-        }
-    }
-    
-    return suffArray;
+    return suffixArray;
 }
 
-void InducedSorting::WorkingClass::inducedSorting(action action, vector <size_t>& sortedData) {
-    vector <size_t> head(basket.size(), 0);//used twice: for insert LMS-suffix/induced suffix array  and for induced sort
-    vector <size_t> tail(basket.size());
+void InducedSorting::WorkingClass::updateSuffArrayFromBasket() {
+    for(size_t i = 0;i < basket.size(); ++i) {
+        for(size_t j = 0;j < basket[i].size(); ++j) {
+            suffixArray.push_back(basket[i][j]);
+        }
+    }
+}
 
-    //Step 1
-    if(action == SORT_LMS_SUBSTR) {
-        //insert LMS substrings
-        vector <size_t>& lmsSuff = sortedData;
-        for(size_t i = 0;i < lmsSuff.size(); ++i) {
-            size_t curBasket = str[lmsSuff[i]];
-            basket[curBasket][basket[curBasket].size() - 1 - head[curBasket]] = lmsSuff[i];
-            ++head[curBasket];
-        }
-        
-    } else {
-        //get suffix array from induced suffix array
-        vector <size_t>& inducedSuffArray = sortedData;
-        
-        size_t i = inducedSuffArray.size();
-        while (i != 0) {
-            --i;
-            size_t curBasket = str[lmsSubstr[inducedSuffArray[i]]];
-            basket[curBasket][basket[curBasket].size() - 1 - head[curBasket]] = lmsSubstr[inducedSuffArray[i]];
-            ++head[curBasket];
-        }
+void InducedSorting::WorkingClass::insertLMSSubstringsInBasket(vector <size_t>& lmsSuff) {
+    //insert LMS substrings
+    vector <size_t> offset(basket.size(), 0);
+    for(size_t i = 0;i < lmsSuff.size(); ++i) {
+        size_t curBasket = str[lmsSuff[i]];
+        basket[curBasket][basket[curBasket].size() - 1 - offset[curBasket]] = lmsSuff[i];
+        ++offset[curBasket];
     }
+}
+
+void InducedSorting::WorkingClass::insertInducedSuffixArrayInBasket(vector <size_t>& inducedSuffArray) {
+    //get suffix array from induced suffix array
+    vector <size_t> offset(basket.size(), 0);
     
-    for(size_t i = 0;i < basket.size();++i) {
-        tail[i] = basket[i].size() - 1;
-        head[i] = 0;
+    size_t i = inducedSuffArray.size();
+    while (i != 0) {
+        --i;
+        size_t curBasket = str[lmsSubstr[inducedSuffArray[i]]];
+        basket[curBasket][basket[curBasket].size() - 1 - offset[curBasket]] = lmsSubstr[inducedSuffArray[i]];
+        ++offset[curBasket];
     }
-    
-    //Step 2: insert L-type LMS-prefix
+}
+
+void InducedSorting::WorkingClass::insertLTypeLMSprefix(vector <size_t>& head) {
     for(size_t i = 0;i < basket.size(); ++i) {
         for(size_t j = 0;j < basket[i].size(); ++j) {
             if(basket[i][j] == SIZE_T_MAX || basket[i][j] == 0) {
@@ -249,9 +245,9 @@ void InducedSorting::WorkingClass::inducedSorting(action action, vector <size_t>
             }
         }
     }
-    
-    
-    //Step 3: insert S-type LMS-prefix
+}
+
+void InducedSorting::WorkingClass::insertSTypeLMSprefix(vector <size_t>& tail) {
     size_t i = basket.size();
     while(i != 0) {
         --i;
@@ -270,6 +266,30 @@ void InducedSorting::WorkingClass::inducedSorting(action action, vector <size_t>
             }
         }
     }
+
+}
+
+void InducedSorting::WorkingClass::inducedSorting(action action, vector <size_t>& sortedData) {
+    vector <size_t> head(basket.size(), 0);//used twice: for insert LMS-suffix/induced suffix array  and for induced sort
+    vector <size_t> tail(basket.size());
+
+    //Step 1 init
+    if(action == SORT_LMS_SUBSTR) {
+        insertLMSSubstringsInBasket(sortedData);
+    } else {
+        insertInducedSuffixArrayInBasket(sortedData);
+    }
+    
+    for(size_t i = 0;i < basket.size();++i) {
+        tail[i] = basket[i].size() - 1;
+        head[i] = 0;
+    }
+    
+    //Step 2: insert L-type LMS-prefix
+    insertLTypeLMSprefix(head);
+    
+    //Step 3: insert S-type LMS-prefix
+    insertSTypeLMSprefix(tail);
 }
 
 bool InducedSorting::WorkingClass::isEqualLMS(size_t lms1, size_t lms2) {
