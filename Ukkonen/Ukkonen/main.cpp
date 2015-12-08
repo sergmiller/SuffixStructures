@@ -11,18 +11,18 @@
 #include "ukkonen.hpp"
 using std::cin;
 using std::cout;
-using std::string;
+
 
 int main(int argc, const char * argv[]) {
     freopen("input.txt", "r", stdin);
     //freopen("output.txt", "w", stdout);
     string s;
     cin >> s;
-    //s.push_back('$');
+    for(size_t i = 0;i < s.size(); ++i) {
+        s[i] -= ('a' - 1);
+    }
     SuffixTree st;
     st.buildTree(s);
-    //st.outTree(st.root);
-    //cout << s << std::endl;
     cout << st.calcSum() << "\n";
   
     return 0;
