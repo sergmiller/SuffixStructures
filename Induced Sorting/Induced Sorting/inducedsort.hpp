@@ -15,58 +15,61 @@
 
 using std::vector;
 
-enum types{
-    L_TYPE,
-    S_TYPE
-};
-
-enum action{
-    SORT_LMS_SUBSTR,
-    GET_SUFF_ARRAY
-};
-
-vector <size_t> getLcp(std::string& s, vector <size_t>& lcp);
+vector <size_t> getLcpKasai(const std::string& s,const vector <size_t>& lcp);
 
 class InducedSorting {
 public:
-    static vector<size_t> getSuffArray(std::string s);
+    static vector<size_t> getSuffArray(const std::string& s);
 private:
     class WorkingClass {
     public:
-        WorkingClass(vector <size_t>& str, size_t alpSize);
+        WorkingClass(const vector <size_t>& str, const size_t alpSize);
         vector <size_t> suffixArrayInducedSortAlg();
     private:
-        size_t alpSize;
-        size_t countChar;
-        bool uniqueCharsFlag;
+        enum _ETS_LMS_SUBSTRINGS{
+            L_TYPE,
+            S_TYPE
+        };
         
-        vector <types> type;
-        vector <size_t>& str;
-        vector <size_t> lmsSubstr;
-        vector <bool> lmsCharFlag;
-        vector <size_t> character;
-        vector <size_t> factorStr;
-        vector <size_t> inducedStr;
-        vector <size_t> suffixArray;
-        vector <size_t> inducedSuffixArray;
+        enum _ACTION{
+            SORT_LMS_SUBSTR,
+            GET_SUFF_ARRAY
+        };
         
-        vector <vector <size_t> > basket;
+        size_t _alpSize;
+        size_t _countChar;
+        bool _uniqueCharsFlag;
         
-        void getTypes();
-        void setUpBasket();
-        void clearBasket();
-        void inductionStep();
-        void getLMSCharacters();
-        void calcFactorStrings();
-        void updateSuffArrayFromBasket();
-        void directlyComputeInducedSuffixArray();
-        void insertLTypeLMSprefix(vector <size_t>& head);
-        void insertSTypeLMSprefix(vector <size_t>& tail);
-        void insertLMSSubstringsInBasket(vector <size_t>& lmsSuff);
-        void insertInducedSuffixArrayInBasket(vector <size_t>& inducedSuffArray);
-        void induceSuffixArray(vector <size_t> inducedSuffixArray);
-        bool isEqualLMS(size_t lms1, size_t lms2);
-        void inducedSorting(action action, vector <size_t>& sortedData);
+        vector <_ETS_LMS_SUBSTRINGS> _type;
+        
+        vector <bool> _lmsCharFlag;
+        
+        const vector <size_t>& _str;
+        
+        vector <size_t> _lmsSubstr;
+        vector <size_t> _character;
+        vector <size_t> _factorStr;
+        vector <size_t> _inducedStr;
+        vector <size_t> _suffixArray;
+        vector <size_t> _inducedSuffixArray;
+        
+        vector <vector <size_t> > _baskets;
+        
+        void _getTypes();
+        void _setUpBaskets();
+        void _clearBaskets();
+        void _inductionStep();
+        void _getLMSCharacters();
+        void _calcFactorStrings();
+        void _updateSuffArrayFromBasket();
+        void _directlyComputeInducedSuffixArray();
+        void _insertLTypeLMSprefix();
+        void _insertSTypeLMSprefix();
+        void _insertLMSSubstringsInBaskets(const vector <size_t>& lmsSuff);
+        void _insertInducedSuffixArrayInBaskets(const vector <size_t>& inducedSuffArray);
+        void _induceSuffixArray(vector <size_t> inducedSuffixArray);
+        bool _isEqualLMS(size_t lms1, size_t lms2);
+        void _inducedSorting(_ACTION action, const vector <size_t>& sortedData);
     };
 };
 

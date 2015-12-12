@@ -11,12 +11,13 @@
 #include <iostream>
 #include <memory.h>
 
-long long SuffixTree::calcSum() {
-    long long sum = 0;
-    Node* cur = &tree[2];
-    Node* last = &tree[tree.size() - 1] + 1;
-    for(; cur != last ;++cur) {
-        sum += (*cur).getLength();
+ui64 SuffixTree::calcSum() {
+    if(!_isBuilded) {
+        return -1;
+    }
+    ui64 sum = 0;
+    for(size_t i = 2;i < _tree.size(); ++i) {
+        sum += _tree[i].getLength();
     }
     return sum;
 }
@@ -25,8 +26,8 @@ inline size_t SuffixTree::Node::getLength() {
     return (isLeaf ? (*lastPos - startPos) : length);
 }
 
-SuffixTree::UkkonenBuilder::UkkonenBuilder(std::string& s, SuffixTree& suffTree):
-str(s), suffTree(suffTree), tree(suffTree.tree) {
+SuffixTree::UkkonenBuilder::UkkonenBuilder(const std::string& s, SuffixTree& suffTree):
+str(s), suffTree(suffTree), tree(suffTree._tree) {
     tree.reserve(2*s.size() + 4);
     
     Node dummy = Node(0, 0, nullptr, 0);
@@ -43,7 +44,7 @@ str(s), suffTree(suffTree), tree(suffTree.tree) {
     currentOffset = 1;
     currentPoint = 1;
     prevLinkPoint = 1;
-    suffTree.lastPos = 0;
+    suffTree._lastPos = 0;
 }
 
 SuffixTree::Node::Node(size_t startPos, size_t length, ui64 parent, size_t index):
@@ -56,18 +57,21 @@ startPos(*lastPos - 1), lastPos(lastPos), parent(parent), index(index), isLeaf(t
     //memset(next, 0, 27 * sizeof(Node*));
 }
 
+SuffixTree::SuffixTree(): _isBuilded(false) {};
 
-void SuffixTree::buildTree(std::string& s) {
+
+void SuffixTree::buildTree(const std::string& s) {
     UkkonenBuilder builder(s, *this);
     for(size_t i = 0;i < s.size(); ++i) {
         builder.addIntoTree(s[i]);
     }
+    _isBuilded = true;
 }
 
 inline void SuffixTree::UkkonenBuilder::addIntoTree(char c) {
     lastChar = c;
     //1 Step: increase leafs from last phase
-    ++suffTree.lastPos;
+    ++suffTree._lastPos;
     
     //2 Step: calc new nodes in tree
     addNewLeafs();
@@ -132,7 +136,7 @@ void SuffixTree::UkkonenBuilder::continueTree() {
 }
 
 SuffixTree::Node SuffixTree::UkkonenBuilder::addLeaf(ui64 cutVertNumber) {
-    Node newLeaf = Node(&suffTree.lastPos, cutVertNumber, tree.size());
+    Node newLeaf = Node(&suffTree._lastPos, cutVertNumber, tree.size());
     tree.push_back(newLeaf);
     return newLeaf;
 }

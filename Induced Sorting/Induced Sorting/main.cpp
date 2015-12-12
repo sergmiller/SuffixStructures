@@ -27,7 +27,7 @@ int main() {
         cout << sa[i] << " ";
     }
     cout << "\n";
-    vector <size_t> lcp = getLcp(s, sa);
+    vector <size_t> lcp = getLcpKasai(s, sa);
     for(size_t i = 0;i < lcp.size(); ++i) {
         cout << lcp[i] << " ";
     }

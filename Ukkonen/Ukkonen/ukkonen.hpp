@@ -18,9 +18,6 @@
 
 using std::string;
 
-
-#define MAX_SIZE 2002
-//#define size_t int
 #define nullptr NULL
 
 typedef unsigned long long ui64;
@@ -28,10 +25,9 @@ typedef unsigned long long ui64;
 
 class SuffixTree {
 public:
-    void buildTree(std::string& s);
-    //bool findString(std::string& s);
-    long long calcSum();
-    //~SuffixTree();
+    void buildTree(const std::string& s);
+    ui64 calcSum();
+    SuffixTree();
 private:
     class Node {
     public:
@@ -42,7 +38,7 @@ private:
         size_t index;
         size_t getLength();
         size_t length;
-        size_t* lastPos;//pointer to last char in str
+        size_t* lastPos;//pointer to length of current added prefix of string
         ui64 next[27];
         ui64 parent;
         ui64 link;
@@ -50,7 +46,7 @@ private:
     
     class UkkonenBuilder {
     public:
-        UkkonenBuilder(std::string& s, SuffixTree& suffTree);
+        UkkonenBuilder(const std::string& s, SuffixTree& suffTree);
         bool emptyPhase;
         size_t lastChar;
         size_t firstPos;
@@ -67,17 +63,19 @@ private:
         ui64 prevLinkPoint;
         ui64 currentLinkPoint;
         
-        std::string& str;
+        const std::string& str;
         SuffixTree& suffTree;
-        std::string getEdge(std::string& s, size_t start, size_t len);
-        std::vector <Node>& tree;
+        std::string getEdge(const std::string& s, size_t start, size_t len);
+        std::vector <Node>& tree;//non-const link for modifications
     };
     
-    size_t lastPos;
-    size_t root;
-    size_t dummy;
+    bool _isBuilded;
     
-    std::vector <Node> tree;
+    size_t _lastPos;
+    size_t _root;
+    size_t _dummy;
+    
+    std::vector <Node> _tree;
 };
 
 #endif /* ukkonen_hpp */

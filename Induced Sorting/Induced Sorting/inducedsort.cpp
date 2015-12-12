@@ -11,7 +11,7 @@
 #include <string>
 #include <iostream>
 
-vector <size_t> getLcp(std::string& s, vector <size_t>& suffArray) {
+vector <size_t> getLcpKasai(const std::string& s, const vector <size_t>& suffArray) {
     vector <size_t> lcp(s.size() + 1);
     vector <size_t> pos(s.size() + 1);
     
@@ -39,7 +39,7 @@ vector <size_t> getLcp(std::string& s, vector <size_t>& suffArray) {
     return lcp;
 }
 
-vector <size_t> InducedSorting::getSuffArray(std::string s) {
+vector <size_t> InducedSorting::getSuffArray(const std::string& s) {
     vector <size_t> str(s.size() + 1);
     char minChar = CHAR_MAX;
     char maxChar = CHAR_MIN;
@@ -58,210 +58,218 @@ vector <size_t> InducedSorting::getSuffArray(std::string s) {
     return sort.suffixArrayInducedSortAlg();
 }
 
-InducedSorting::WorkingClass::WorkingClass(vector <size_t>& str, size_t alpSize):str(str) {
-    WorkingClass::alpSize = alpSize;
+InducedSorting::WorkingClass::WorkingClass(const vector <size_t>& str, size_t alpSize):_str(str) {
+    WorkingClass::_alpSize = alpSize;
 }
 
-void InducedSorting::WorkingClass::getTypes() {
-    type.resize(str.size());
-    type[str.size() - 1] = S_TYPE;
+void InducedSorting::WorkingClass::_getTypes() {
+    _type.resize(_str.size());
+    _type[_str.size() - 1] = S_TYPE;
     
-    size_t i = str.size() - 1;
+    size_t i = _str.size() - 1;
     while(i != 0) {
         --i;
-        if(str[i] < str[i + 1]) {
-            type[i] = S_TYPE;
+        if(_str[i] < _str[i + 1]) {
+            _type[i] = S_TYPE;
         }
         
-        if(str[i] > str[i + 1]) {
-            type[i] = L_TYPE;
+        if(_str[i] > _str[i + 1]) {
+            _type[i] = L_TYPE;
         }
         
-        if(str[i] == str[i + 1]) {
-            type[i] = type[i + 1];
+        if(_str[i] == _str[i + 1]) {
+            _type[i] = _type[i + 1];
         }
     }
 }
 
-void InducedSorting::WorkingClass::getLMSCharacters() {
-    lmsCharFlag.resize(str.size(), false);
+void InducedSorting::WorkingClass::_getLMSCharacters() {
+    _lmsCharFlag.resize(_str.size(), false);
     
     //case when the sentinel is the one LMS-character
-    if(str.size() == 1) {
-        lmsSubstr.push_back(0);
-        lmsCharFlag[0] = true;
+    if(_str.size() == 1) {
+        _lmsSubstr.push_back(0);
+        _lmsCharFlag[0] = true;
         return;
     }
     
-    for(size_t i = 0;i < str.size() - 1; ++i) {
-        if(type[i] == L_TYPE && type[i + 1] == S_TYPE) {
-            lmsSubstr.push_back(i + 1);
-            lmsCharFlag[i + 1] = true;
+    for(size_t i = 0;i < _str.size() - 1; ++i) {
+        if(_type[i] == L_TYPE && _type[i + 1] == S_TYPE) {
+            _lmsSubstr.push_back(i + 1);
+            _lmsCharFlag[i + 1] = true;
         }
     }
 }
 
-void InducedSorting::WorkingClass::setUpBasket() {
-    basket.resize(alpSize);
+void InducedSorting::WorkingClass::_setUpBaskets() {
+    _baskets.resize(_alpSize);
     
     //calc basket size
-    vector <size_t> countChars(alpSize, 0);
+    vector <size_t> countChars(_alpSize, 0);
     
-    for(size_t i = 0;i < str.size(); ++i) {
-        ++countChars[str[i]];
+    for(size_t i = 0;i < _str.size(); ++i) {
+        ++countChars[_str[i]];
     }
     
     //set up basket size
-    for(size_t i = 0;i < alpSize; ++i) {
-        basket[i].resize(countChars[i], SIZE_T_MAX);
+    for(size_t i = 0;i < _alpSize; ++i) {
+        _baskets[i].resize(countChars[i], SIZE_T_MAX);
     }
 }
 
 //get characters for induced string
-void InducedSorting::WorkingClass::calcFactorStrings() {
-    character.resize(str.size());
+void InducedSorting::WorkingClass::_calcFactorStrings() {
+    _character.resize(_str.size());
     
-    countChar = 0;
+    _countChar = 0;
     size_t lastLms = 0;
     bool existPrev = false;
     
-    for(size_t i = 0;i < basket.size(); ++i) {
-        for(size_t j = 0;j < basket[i].size(); ++j) {
-            if(lmsCharFlag[basket[i][j]]) {
+    for(size_t i = 0;i < _baskets.size(); ++i) {
+        for(size_t j = 0;j < _baskets[i].size(); ++j) {
+            if(_lmsCharFlag[_baskets[i][j]]) {
                 if(existPrev) {
-                    if(isEqualLMS(lastLms, basket[i][j])) {
-                        character[basket[i][j]] = countChar;
+                    if(_isEqualLMS(lastLms, _baskets[i][j])) {
+                        _character[_baskets[i][j]] = _countChar;
                     } else {
-                        character[basket[i][j]] = ++countChar;
-                        factorStr.push_back(basket[i][j]);
+                        _character[_baskets[i][j]] = ++_countChar;
+                        _factorStr.push_back(_baskets[i][j]);
                     }
                 } else {
-                    character[basket[i][j]] = 0;
-                    factorStr.push_back(basket[i][j]);
+                    _character[_baskets[i][j]] = 0;
+                    _factorStr.push_back(_baskets[i][j]);
                 }
                 
-                lastLms = basket[i][j];
+                lastLms = _baskets[i][j];
                 existPrev = true;
             }
         }
     }
     
-    inducedStr.resize(lmsSubstr.size());
+    _inducedStr.resize(_lmsSubstr.size());
     
-    for(size_t i = 0;i < inducedStr.size(); ++i) {
+    for(size_t i = 0;i < _inducedStr.size(); ++i) {
         
-        inducedStr[i] = character[lmsSubstr[i]];
+        _inducedStr[i] = _character[_lmsSubstr[i]];
     }
 }
 
-void InducedSorting::WorkingClass::clearBasket() {
-    for(size_t i = 0;i < basket.size(); ++i) {
-        for(size_t j = 0;j < basket[i].size(); ++j) {
-            basket[i][j] = SIZE_T_MAX;
+void InducedSorting::WorkingClass::_clearBaskets() {
+    for(size_t i = 0;i < _baskets.size(); ++i) {
+        for(size_t j = 0;j < _baskets[i].size(); ++j) {
+            _baskets[i][j] = SIZE_T_MAX;
         }
     }
 }
 
-void InducedSorting::WorkingClass::directlyComputeInducedSuffixArray() {
-    inducedSuffixArray.resize(inducedStr.size());
-    for(size_t i = 0;i < inducedStr.size(); ++i) {
-        inducedSuffixArray[inducedStr[i]] = i;
+void InducedSorting::WorkingClass::_directlyComputeInducedSuffixArray() {
+    _inducedSuffixArray.resize(_inducedStr.size());
+    for(size_t i = 0;i < _inducedStr.size(); ++i) {
+        _inducedSuffixArray[_inducedStr[i]] = i;
     }
 }
 
-void InducedSorting::WorkingClass::inductionStep() {
-    if(countChar + 1 == lmsSubstr.size()) {
-        directlyComputeInducedSuffixArray();
+void InducedSorting::WorkingClass::_inductionStep() {
+    if(_countChar + 1 == _lmsSubstr.size()) {
+        _directlyComputeInducedSuffixArray();
     } else {
         
-        WorkingClass induction = WorkingClass(inducedStr, alpSize);
-        inducedSuffixArray = induction.suffixArrayInducedSortAlg();
+        WorkingClass induction = WorkingClass(_inducedStr, _alpSize);
+        _inducedSuffixArray = induction.suffixArrayInducedSortAlg();
     }
 }
 
 vector <size_t> InducedSorting::WorkingClass::suffixArrayInducedSortAlg() {
     
-    getTypes();
-    getLMSCharacters();
-    setUpBasket();
+    _getTypes();
+    _getLMSCharacters();
+    _setUpBaskets();
     
-    inducedSorting(SORT_LMS_SUBSTR, lmsSubstr);
-    calcFactorStrings();
+    _inducedSorting(SORT_LMS_SUBSTR, _lmsSubstr);
+    _calcFactorStrings();
     
-    inductionStep();
+    _inductionStep();
     
-    clearBasket();
+    _clearBaskets();
     
-    inducedSorting(GET_SUFF_ARRAY, inducedSuffixArray);
+    _inducedSorting(GET_SUFF_ARRAY, _inducedSuffixArray);
     
-    updateSuffArrayFromBasket();
+    _updateSuffArrayFromBasket();
     
-    return suffixArray;
+    return _suffixArray;
 }
 
-void InducedSorting::WorkingClass::updateSuffArrayFromBasket() {
-    for(size_t i = 0;i < basket.size(); ++i) {
-        for(size_t j = 0;j < basket[i].size(); ++j) {
-            suffixArray.push_back(basket[i][j]);
+void InducedSorting::WorkingClass::_updateSuffArrayFromBasket() {
+    for(size_t i = 0;i < _baskets.size(); ++i) {
+        for(size_t j = 0;j < _baskets[i].size(); ++j) {
+            _suffixArray.push_back(_baskets[i][j]);
         }
     }
 }
 
-void InducedSorting::WorkingClass::insertLMSSubstringsInBasket(vector <size_t>& lmsSuff) {
+void InducedSorting::WorkingClass::_insertLMSSubstringsInBaskets(const vector <size_t>& lmsSuff) {
     //insert LMS substrings
-    vector <size_t> offset(basket.size(), 0);
+    vector <size_t> offset(_baskets.size(), 0);
     for(size_t i = 0;i < lmsSuff.size(); ++i) {
-        size_t curBasket = str[lmsSuff[i]];
-        basket[curBasket][basket[curBasket].size() - 1 - offset[curBasket]] = lmsSuff[i];
+        size_t curBasket = _str[lmsSuff[i]];
+        _baskets[curBasket][_baskets[curBasket].size() - 1 - offset[curBasket]] = lmsSuff[i];
         ++offset[curBasket];
     }
 }
 
-void InducedSorting::WorkingClass::insertInducedSuffixArrayInBasket(vector <size_t>& inducedSuffArray) {
+void InducedSorting::WorkingClass::_insertInducedSuffixArrayInBaskets(const vector <size_t>& inducedSuffArray) {
     //get suffix array from induced suffix array
-    vector <size_t> offset(basket.size(), 0);
+    vector <size_t> offset(_baskets.size(), 0);
     
     size_t i = inducedSuffArray.size();
     while (i != 0) {
         --i;
-        size_t curBasket = str[lmsSubstr[inducedSuffArray[i]]];
-        basket[curBasket][basket[curBasket].size() - 1 - offset[curBasket]] = lmsSubstr[inducedSuffArray[i]];
+        size_t curBasket = _str[_lmsSubstr[inducedSuffArray[i]]];
+        _baskets[curBasket][_baskets[curBasket].size() - 1 - offset[curBasket]] = _lmsSubstr[inducedSuffArray[i]];
         ++offset[curBasket];
     }
 }
 
-void InducedSorting::WorkingClass::insertLTypeLMSprefix(vector <size_t>& head) {
-    for(size_t i = 0;i < basket.size(); ++i) {
-        for(size_t j = 0;j < basket[i].size(); ++j) {
-            if(basket[i][j] == SIZE_T_MAX || basket[i][j] == 0) {
+void InducedSorting::WorkingClass::_insertLTypeLMSprefix() {
+    vector <size_t> head(_baskets.size(), 0);
+    for(size_t i = 0;i < _baskets.size(); ++i) {
+        for(size_t j = 0;j < _baskets[i].size(); ++j) {
+            if(_baskets[i][j] == SIZE_T_MAX || _baskets[i][j] == 0) {
                 continue;
             }
             
-            size_t curPos = basket[i][j] - 1;
-            size_t curChar = str[curPos];
-            if(type[curPos] == L_TYPE) {
-                basket[curChar][head[curChar]] = curPos;
+            size_t curPos = _baskets[i][j] - 1;
+            size_t curChar = _str[curPos];
+            if(_type[curPos] == L_TYPE) {
+                _baskets[curChar][head[curChar]] = curPos;
                 ++head[curChar];
             }
         }
     }
 }
 
-void InducedSorting::WorkingClass::insertSTypeLMSprefix(vector <size_t>& tail) {
-    size_t i = basket.size();
+void InducedSorting::WorkingClass::_insertSTypeLMSprefix() {
+    vector <size_t> tail(_baskets.size());
+    size_t i = 0;
+    for(;i < _baskets.size();++i) {
+        tail[i] = _baskets[i].size() - 1;
+    }
+    
+    i = _baskets.size();
+    
     while(i != 0) {
         --i;
-        size_t j = basket[i].size();
+        size_t j = _baskets[i].size();
         while(j != 0) {
             --j;
-            if(basket[i][j] == SIZE_T_MAX || basket[i][j] == 0) {
+            if(_baskets[i][j] == SIZE_T_MAX || _baskets[i][j] == 0) {
                 continue;
             }
             
-            size_t curPos = basket[i][j] - 1;
-            size_t curChar = str[curPos];
-            if(type[curPos] == S_TYPE) {
-                basket[curChar][tail[curChar]] = curPos;
+            size_t curPos = _baskets[i][j] - 1;
+            size_t curChar = _str[curPos];
+            if(_type[curPos] == S_TYPE) {
+                _baskets[curChar][tail[curChar]] = curPos;
                 --tail[curChar];
             }
         }
@@ -269,37 +277,31 @@ void InducedSorting::WorkingClass::insertSTypeLMSprefix(vector <size_t>& tail) {
 
 }
 
-void InducedSorting::WorkingClass::inducedSorting(action action, vector <size_t>& sortedData) {
-    vector <size_t> head(basket.size(), 0);//used twice: for insert LMS-suffix/induced suffix array  and for induced sort
-    vector <size_t> tail(basket.size());
+void InducedSorting::WorkingClass::_inducedSorting(_ACTION action, const vector <size_t>& sortedData) {
+    //used twice: for insert LMS-suffix/induced suffix array  and for induced sort
 
     //Step 1 init
     if(action == SORT_LMS_SUBSTR) {
-        insertLMSSubstringsInBasket(sortedData);
+        _insertLMSSubstringsInBaskets(sortedData);
     } else {
-        insertInducedSuffixArrayInBasket(sortedData);
-    }
-    
-    for(size_t i = 0;i < basket.size();++i) {
-        tail[i] = basket[i].size() - 1;
-        head[i] = 0;
+        _insertInducedSuffixArrayInBaskets(sortedData);
     }
     
     //Step 2: insert L-type LMS-prefix
-    insertLTypeLMSprefix(head);
+    _insertLTypeLMSprefix();
     
     //Step 3: insert S-type LMS-prefix
-    insertSTypeLMSprefix(tail);
+    _insertSTypeLMSprefix();
 }
 
-bool InducedSorting::WorkingClass::isEqualLMS(size_t lms1, size_t lms2) {
+bool InducedSorting::WorkingClass::_isEqualLMS(size_t lms1, size_t lms2) {
     bool existLType = false;
-    while(lms1 < str.size() && lms2 < str.size() && str[lms1] == str[lms2] && type[lms1] == type[lms2]) {
-        if(type[lms1] == L_TYPE) {
+    while(lms1 < _str.size() && lms2 < _str.size() && _str[lms1] == _str[lms2] && _type[lms1] == _type[lms2]) {
+        if(_type[lms1] == L_TYPE) {
             existLType = true;
         }
         
-        if(existLType && type[lms1] == S_TYPE) {
+        if(existLType && _type[lms1] == S_TYPE) {
             return true;
         }
 
