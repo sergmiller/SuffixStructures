@@ -322,7 +322,7 @@ void test();//test for http://acm.timus.ru/problem.aspx?space=1&num=1706
 int main(int argc, const char * argv[]) {
     std::ios::sync_with_stdio(false);
     //srand(time(NULL));
-    //freopen("input.txt", "r", stdin);
+    freopen("input.txt", "r", stdin);
     //freopen("output.txt", "w", stdout);
 //    string s;
 //    cin >> s;
